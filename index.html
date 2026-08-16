@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADHR AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <header>
+            <h1>ADHR AI</h1>
+            <p>Ang iyong AI Assistant</p>
+        </header>
+
+        <!-- Chat Box -->
+        <div class="chat-box" id="chat-box">
+            <div class="message ai-message">
+                Kamusta! Ako si **ADHR AI**. Paano kita matutulungan ngayon?
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Mag-type ng mensahe..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Ipadala</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
