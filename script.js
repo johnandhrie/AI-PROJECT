@@ -1,4 +1,4 @@
-const GEMINI_API_KEY = "AQ.Ab8RN6KpppWoomqXDFn_q9Gr4p-3NhaXNTXtQU1ufOQuIedZaw";
+const GEMINI_API_KEY = "AQ.Ab8RN6LTY3D_mXS2D0UULhkQS_Oe64kystq32ICT1RfBVK9GJQ";
 
 async function sendMessage() {
     const inputField = document.getElementById("user-input");
@@ -7,15 +7,15 @@ async function sendMessage() {
 
     if (userText === "") return;
 
-    // 1. Ipakita ang mensahe ng user
+    // 1. Display user message
     appendMessage(userText, "user-message");
     inputField.value = "";
 
-    // 2. Maglagay ng "nagtatype..." indicator
-    const loadingMessage = appendMessage("Nag-iisip si ADHR AI...", "ai-message");
+    // 2. Add loading indicator
+    const loadingMessage = appendMessage("ADHR AI is thinking...", "ai-message");
 
     try {
-        // 3. Tumawag sa Google Gemini REST API
+        // 3. Request to Gemini REST API
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         
         const response = await fetch(url, {
@@ -32,18 +32,23 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        // Tanggalin ang loading indicator
+        // Remove loading indicator
         chatBox.removeChild(loadingMessage);
 
-        if (data && data.candidates && data.candidates[0].content.parts[0].text) {
+        if (data && data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
             const aiResponse = data.candidates[0].content.parts[0].text;
             appendMessage(aiResponse, "ai-message");
+        } else if (data.error) {
+            console.error("Gemini API Error:", data.error);
+            appendMessage(`API Error: ${data.error.message}`, "ai-message");
         } else {
-            appendMessage("Pasensya na, may problema sa pagproseso ng tugon.", "ai-message");
+            console.error("Unexpected response:", data);
+            appendMessage("Received an unexpected response from the AI.", "ai-message");
         }
     } catch (error) {
         chatBox.removeChild(loadingMessage);
-        appendMessage("Mali ang koneksyon o invalid ang API Key.", "ai-message");
+        console.error("Fetch Error:", error);
+        appendMessage("Network error. Please try again.", "ai-message");
     }
 }
 
